@@ -29,7 +29,7 @@ This repository contains the **CultivatedText** web application: lead capture, t
 │   ├── styles.css
 │   ├── main.js
 │   └── js/analytics.js
-├── vercel.json                 ← maps / → frontend/ (fixes Vercel 404)
+├── vercel.json                 ← outputDirectory: frontend (Vercel static root)
 ├── package.json                ← minimal scripts for Vercel build step
 └── backend/
     ├── package.json
@@ -46,7 +46,7 @@ This repository contains the **CultivatedText** web application: lead capture, t
 
 **Why you saw `404 NOT_FOUND`:** Vercel deployed the **repo root**, which has no `index.html` at `/` — only under **`frontend/`**.
 
-**Fix (in this repo):** **`vercel.json`** rewrites requests so `/` and `/sales.html` etc. map to **`frontend/`**. Redeploy after pulling this change (`vercel --prod` or push to GitHub if the project is linked).
+**Fix (in this repo):** **`vercel.json`** sets **`outputDirectory`** to **`frontend`**, so the built site root is your HTML/CSS/JS (Vercel’s default **`public`** folder is not used). Redeploy after pulling this change (`vercel --prod` or push to GitHub if the project is linked).
 
 **APIs on Vercel:** A plain **static** deployment does **not** run the **Express** server. Paths like **`/api/lead`** and **`/api/payfast/*`** will **not** work on Vercel until you either:
 
