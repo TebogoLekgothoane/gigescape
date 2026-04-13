@@ -11,11 +11,89 @@ function pfEncode(value) {
 }
 
 /**
- * Build the string PayFast signs, then MD5 it.
- * Excludes empty values and the `signature` key. Appends passphrase at the end.
- *
- * @param {Record<string, string>} data
- * @param {string} passphrase
+ * PHP !empty() for PayFast form fields (excludes '', '0', 0, false, null).
+ */
+function phpNotEmpty(val) {
+  if (val === null || val === undefined) return false;
+  if (val === false) return false;
+  if (val === '') return false;
+  if (val === '0') return false;
+  if (val === 0) return false;
+  return true;
+}
+
+/**
+ * Payment form POST to /eng/process — must match PayFast PHP SDK Auth::generateSignature
+ * (field order from the data object, NOT alphabetical). See Payfast/payfast-php-sdk lib/Auth.php
+ */
+function generatePaymentFormSignature(data, passphrase) {
+  const PAYFAST_FIELDS = new Set([
+    'merchant_id',
+    'merchant_key',
+    'return_url',
+    'cancel_url',
+    'notify_url',
+    'notify_method',
+    'name_first',
+    'name_last',
+    'email_address',
+    'cell_number',
+    'm_payment_id',
+    'amount',
+    'item_name',
+    'item_description',
+    'custom_int1',
+    'custom_int2',
+    'custom_int3',
+    'custom_int4',
+    'custom_int5',
+    'custom_str1',
+    'custom_str2',
+    'custom_str3',
+    'custom_str4',
+    'custom_str5',
+    'email_confirmation',
+    'confirmation_address',
+    'currency',
+    'payment_method',
+    'subscription_type',
+    'passphrase',
+    'billing_date',
+    'recurring_amount',
+    'frequency',
+    'cycles',
+    'subscription_notify_email',
+    'subscription_notify_webhook',
+    'subscription_notify_buyer',
+  ]);
+
+  const filtered = { ...data };
+  delete filtered.signature;
+
+  const sortAttributes = {};
+  for (const key of Object.keys(filtered)) {
+    if (PAYFAST_FIELDS.has(key)) {
+      sortAttributes[key] = filtered[key];
+    }
+  }
+
+  if (passphrase && String(passphrase).trim() !== '') {
+    sortAttributes.passphrase = pfEncode(String(passphrase).trim());
+  }
+
+  let pfOutput = '';
+  for (const [attribute, value] of Object.entries(sortAttributes)) {
+    if (!phpNotEmpty(value)) continue;
+    const val = pfEncode(String(value).trim());
+    pfOutput += `${attribute}=${val}&`;
+  }
+
+  const getString = pfOutput.length ? pfOutput.slice(0, -1) : '';
+  return crypto.createHash('md5').update(getString).digest('hex');
+}
+
+/**
+ * ITN / API-style signature: alphabetical keys (legacy helper; ITN uses generateItnSignatureMd5).
  */
 function generateSignature(data, passphrase) {
   const filtered = { ...data };
@@ -33,12 +111,30 @@ function generateSignature(data, passphrase) {
 }
 
 /**
- * Validate ITN signature from PayFast (lowercase hex).
+ * ITN MD5 — matches PayFast PHP Notification::pfValidSignature + dataToString (order = raw POST until `signature`).
  */
-function validateItnSignature(received, passphrase) {
+function generateItnSignatureMd5(rawBody, passphrase) {
+  const params = new URLSearchParams(typeof rawBody === 'string' ? rawBody : '');
+  const parts = [];
+  for (const [key, value] of params) {
+    if (key === 'signature') break;
+    parts.push(`${key}=${pfEncode(value)}`);
+  }
+  let temp = parts.join('&');
+  if (passphrase && String(passphrase).trim() !== '') {
+    temp += `&passphrase=${pfEncode(String(passphrase).trim())}`;
+  }
+  return crypto.createHash('md5').update(temp).digest('hex');
+}
+
+/**
+ * Validate ITN signature from PayFast (lowercase hex). Requires raw x-www-form-urlencoded body.
+ */
+function validateItnSignature(received, passphrase, rawBody) {
   const sig = received.signature;
   if (!sig || typeof sig !== 'string') return false;
-  const expected = generateSignature(received, passphrase);
+  if (!rawBody || typeof rawBody !== 'string') return false;
+  const expected = generateItnSignatureMd5(rawBody, passphrase);
   return expected.toLowerCase() === String(sig).toLowerCase();
 }
 
@@ -89,6 +185,8 @@ async function confirmItnWithPayFast(rawBody, validateUrl) {
 
 module.exports = {
   generateSignature,
+  generatePaymentFormSignature,
+  generateItnSignatureMd5,
   validateItnSignature,
   isAllowedPayFastIp,
   confirmItnWithPayFast,

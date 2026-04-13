@@ -28,10 +28,14 @@ This repository contains the **CultivatedText** web application: lead capture, t
 │   ├── payment-cancel.html     ← cancel_url
 │   ├── styles.css
 │   ├── main.js
-│   └── js/analytics.js
+│   └── js/
+│       ├── config.js           ← Railway API URL for production (Vercel)
+│       └── analytics.js
 ├── vercel.json                 ← outputDirectory: frontend (Vercel static root)
 ├── package.json                ← minimal scripts for Vercel build step
 └── backend/
+    ├── Procfile                ← Railway / process hosts
+    ├── railway.toml
     ├── package.json
     ├── server.js               ← Express + APIs + static files
     ├── lib/
@@ -42,20 +46,62 @@ This repository contains the **CultivatedText** web application: lead capture, t
         └── leads.json          ← leads + payment flags
 ```
 
-## Deploying on Vercel
+## Production: Vercel (site) + Railway (API + PayFast)
 
-**Why you saw `404 NOT_FOUND`:** Vercel deployed the **repo root**, which has no `index.html` at `/` — only under **`frontend/`**.
+**Architecture**
 
-**Fix (in this repo):** **`vercel.json`** sets **`outputDirectory`** to **`frontend`**, so the built site root is your HTML/CSS/JS (Vercel’s default **`public`** folder is not used). Redeploy after pulling this change (`vercel --prod` or push to GitHub if the project is linked).
+| Piece | Host | Role |
+|--------|------|------|
+| **Pages** | **Vercel** (`gigesacpe.vercel.app`) | Static HTML/CSS/JS only. |
+| **API** | **Railway** (your `*.up.railway.app` URL) | Express: `/api/lead`, `/api/payfast/init`, `/api/payfast/itn`. |
 
-**APIs on Vercel:** A plain **static** deployment does **not** run the **Express** server. Paths like **`/api/lead`** and **`/api/payfast/*`** will **not** work on Vercel until you either:
+**Vercel:** **`vercel.json`** uses **`outputDirectory": "frontend"`** so `/` serves `index.html`. Redeploy with `vercel --prod` or git push.
 
-1. **Host the backend elsewhere** (e.g. **Railway**, **Render**, **Fly.io**) and point the browser at that API:
-   - Set **`window.__API_BASE__`** to your API origin (e.g. `https://your-api.railway.app`) **before** `main.js` loads on each HTML page, **or**
-   - Add a **Vercel rewrite** (in the dashboard) from `/api/:path*` → your backend’s `/api/:path*`, and keep **`CORS_ORIGIN`** on the backend including `https://gigesacpe.vercel.app` (your real Vercel URL).
-2. **Or** run **only** the full Node app on a VPS/Railway (Express serves **`frontend/`** + API in one process) and skip Vercel for production.
+### 1) Deploy the API on Railway
 
-**PayFast `BASE_URL`:** Must be your **public** site URL (e.g. `https://gigesacpe.vercel.app`) so return/cancel/notify URLs are correct.
+1. Create a project on [Railway](https://railway.app/) → **Deploy from GitHub** (this repo).
+2. Set **Root Directory** to **`backend`** (or deploy only the `backend` folder).
+3. **Variables** (example):
+
+   | Variable | Example |
+   |----------|---------|
+   | `FRONTEND_URL` | `https://gigesacpe.vercel.app` |
+   | `API_PUBLIC_URL` | `https://YOUR-SERVICE.up.railway.app` (Railway shows this after deploy) |
+   | `CORS_ORIGIN` | `https://gigesacpe.vercel.app` |
+   | `TRUST_PROXY` | `1` |
+   | `MERCHANT_ID`, `MERCHANT_KEY`, `PASSPHRASE` | From PayFast |
+   | `PAYFAST_SANDBOX` | `true` until go-live |
+
+   **`API_PUBLIC_URL`** must match the **public HTTPS URL** Railway assigns (same value you put in **`frontend/js/config.js`**).
+
+4. **Generate domain** in Railway so the API has a stable `https://…` URL.
+5. **Health check:** open `https://YOUR-SERVICE.up.railway.app/api/health` — should return JSON `{"ok":true,…}`.
+
+**Data:** `backend/data/leads.json` lives on Railway’s filesystem. For durability across restarts, add a **volume** mounted at `backend/data` or move to a database later.
+
+### 2) Point the Vercel site at the API
+
+1. Open **`frontend/js/config.js`**.
+2. Replace **`REPLACE_WITH_RAILWAY_API_URL`** with your Railway API origin only, e.g. `https://your-service.up.railway.app` (no trailing slash, no `/api` path).
+3. Commit, push, and let Vercel redeploy (or `vercel --prod`).
+
+The browser will call **`https://…railway.app/api/lead`** etc. **`CORS_ORIGIN`** on Railway must include **`https://gigesacpe.vercel.app`**.
+
+### 3) PayFast URLs (split hosts)
+
+After Railway + Vercel envs are set, the server logs (on Railway) show:
+
+- **Return / cancel** → **`FRONTEND_URL`** (Vercel).
+- **Notify (ITN)** → **`API_PUBLIC_URL`** (Railway).
+
+Put the **notify** URL in the PayFast dashboard:  
+`https://YOUR-SERVICE.up.railway.app/api/payfast/itn`
+
+Use **live** credentials and **`PAYFAST_SANDBOX=false`** only when going live.
+
+### 4) Local development (unchanged)
+
+Run **`npm start`** in **`backend`** and open **`http://localhost:PORT`**. Leave **`FRONTEND_URL`** / **`API_PUBLIC_URL`** empty so **`BASE_URL`** is used for everything; keep **`frontend/js/config.js`** placeholder or use localhost (empty API base).
 
 ## Lead record (JSON)
 
@@ -90,7 +136,7 @@ Each lead may include:
 
    Fill in at least:
 
-   - **`BASE_URL`** — e.g. `http://localhost:3000` (no trailing slash). Used to build PayFast **return**, **cancel**, and **notify** URLs.
+   - **`BASE_URL`** — e.g. `http://localhost:3000` (no trailing slash). Used when **`FRONTEND_URL`** / **`API_PUBLIC_URL`** are not set (typical local dev).
    - **`MERCHANT_ID`**, **`MERCHANT_KEY`**, **`PASSPHRASE`** — from the PayFast dashboard (**sandbox** first).
    - **`PAYFAST_SANDBOX=true`** until you go live.
    - **`CORS_ORIGIN`** — e.g. `http://localhost:3000` when using this server for both HTML and API.
@@ -131,17 +177,19 @@ Validate URL (server-side): `https://sandbox.payfast.co.za/eng/query/validate`
 
 ### 3) URLs in the PayFast dashboard
 
-Set these to match **`BASE_URL`** in `.env` (production must be **HTTPS**):
+The server builds URLs from **`.env`** (production must use **HTTPS**):
 
-| Setting | Example |
-|---------|---------|
-| **Return URL** | `https://yourdomain.com/payment-success.html` |
-| **Cancel URL** | `https://yourdomain.com/payment-cancel.html` |
-| **Notify URL (ITN)** | `https://yourdomain.com/api/payfast/itn` |
+| Setting | Built from | Example (split: Vercel + Railway) |
+|---------|------------|-----------------------------------|
+| **Return URL** | **`FRONTEND_URL`** (fallback: `BASE_URL`) | `https://gigesacpe.vercel.app/payment-success.html` |
+| **Cancel URL** | **`FRONTEND_URL`** | `https://gigesacpe.vercel.app/payment-cancel.html` |
+| **Notify URL (ITN)** | **`API_PUBLIC_URL`** (fallback: `BASE_URL`) | `https://your-api.up.railway.app/api/payfast/itn` |
 
-The app also sends these URLs on each transaction from **`POST /api/payfast/init`**; keep dashboard values aligned.
+**Single-server local dev:** only **`BASE_URL`** is needed; return, cancel, and notify all use that host.
 
-**404 after returning from PayFast:** `BASE_URL` and **`PORT`** must match what you use in the browser (e.g. `BASE_URL=http://localhost:3001` if the app runs on port **3001**). Set **`CORS_ORIGIN`** to the same origin. After changing `.env`, restart the server. On startup, the console prints the exact **return / cancel / notify** URLs in use — copy those into the PayFast dashboard if unsure.
+The app sends these on each **`POST /api/payfast/init`**; align the PayFast dashboard with the same hosts. On startup, the API logs **return / cancel / notify** — copy from Railway logs if unsure.
+
+**404 after PayFast return:** **`FRONTEND_URL`** must be your **Vercel** site (no trailing slash). **`PORT`** only affects local **`BASE_URL`**.
 
 ### 4) How checkout works (no passphrase in the browser)
 
@@ -160,7 +208,9 @@ The app also sends these URLs on each transaction from **`POST /api/payfast/init
 | `MERCHANT_ID` | PayFast merchant ID |
 | `MERCHANT_KEY` | PayFast merchant key (used in signed form; still server-side only) |
 | `PASSPHRASE` | Signature secret — **never** expose to the frontend |
-| `BASE_URL` | Builds return / cancel / notify URLs |
+| `BASE_URL` | Fallback when `FRONTEND_URL` / `API_PUBLIC_URL` unset (local dev) |
+| `FRONTEND_URL` | PayFast **return** and **cancel** (usually **Vercel**) |
+| `API_PUBLIC_URL` | PayFast **notify (ITN)** — must be this API’s public URL (usually **Railway**) |
 
 ### 6) Testing ITN on localhost
 
@@ -169,8 +219,8 @@ PayFast cannot reach `http://localhost`. Use a tunnel (e.g. ngrok), set **`BASE_
 ### 7) Go live
 
 1. Switch to **live** credentials in PayFast.  
-2. Set **`PAYFAST_SANDBOX=false`** in `.env`.  
-3. Set **`BASE_URL`** to the real **`https://`** domain.  
+2. Set **`PAYFAST_SANDBOX=false`** in the API **`.env`** (Railway variables).  
+3. Set **`FRONTEND_URL`** = `https://gigesacpe.vercel.app` (or your custom domain) and **`API_PUBLIC_URL`** = your Railway **`https://`** API URL.  
 4. Re-test return, cancel, and ITN end-to-end.
 
 ---

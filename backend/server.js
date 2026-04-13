@@ -15,7 +15,7 @@ const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const {
-  generateSignature,
+  generatePaymentFormSignature,
   validateItnSignature,
   isAllowedPayFastIp,
   confirmItnWithPayFast,
@@ -66,6 +66,18 @@ function writeLeads(leads) {
 
 function getBaseUrl() {
   const b = process.env.BASE_URL || `http://localhost:${PORT}`;
+  return String(b).replace(/\/$/, '');
+}
+
+/** Public URL of the static site (e.g. Vercel). PayFast return + cancel redirect here. */
+function getFrontendPublicUrl() {
+  const b = process.env.FRONTEND_URL || process.env.BASE_URL || `http://localhost:${PORT}`;
+  return String(b).replace(/\/$/, '');
+}
+
+/** Public URL of this Express API (e.g. Railway). PayFast ITN (notify) must hit this host. */
+function getApiPublicUrl() {
+  const b = process.env.API_PUBLIC_URL || process.env.BACKEND_URL || getBaseUrl();
   return String(b).replace(/\/$/, '');
 }
 
@@ -168,7 +180,7 @@ app.post(
     }
 
     const data = req.body;
-    if (!validateItnSignature(data, passphrase)) {
+    if (!validateItnSignature(data, passphrase, req.payfastRawBody)) {
       console.warn('[payfast itn] Invalid signature');
       return res.status(400).send('INVALID_SIG');
     }
@@ -360,14 +372,15 @@ app.post(
     const email = String(req.body.email).toLowerCase().trim();
     const nameFirst = sanitizeString(req.body.name_first || 'Customer', 80);
     const nameLast = sanitizeString(req.body.name_last || '', 80);
-    const base = getBaseUrl();
+    const front = getFrontendPublicUrl();
+    const apiBase = getApiPublicUrl();
 
     const paymentFields = {
       merchant_id: String(merchantId),
       merchant_key: String(merchantKey),
-      return_url: `${base}/payment-success.html`,
-      cancel_url: `${base}/payment-cancel.html`,
-      notify_url: `${base}/api/payfast/itn`,
+      return_url: `${front}/payment-success.html`,
+      cancel_url: `${front}/payment-cancel.html`,
+      notify_url: `${apiBase}/api/payfast/itn`,
       name_first: nameFirst,
       name_last: nameLast,
       email_address: email,
@@ -377,7 +390,7 @@ app.post(
       item_description: 'CultivatedText — digital download + coaching',
     };
 
-    const signature = generateSignature(paymentFields, passphrase);
+    const signature = generatePaymentFormSignature(paymentFields, passphrase);
 
     return res.json({
       success: true,
@@ -419,13 +432,15 @@ app.use(
 );
 
 app.listen(PORT, () => {
-  const base = getBaseUrl();
+  const front = getFrontendPublicUrl();
+  const apiBase = getApiPublicUrl();
   const sandbox = process.env.PAYFAST_SANDBOX !== 'false';
   console.log(`CultivatedText server listening on http://localhost:${PORT}`);
   console.log(`Frontend: ${FRONTEND_DIR}`);
-  console.log(`BASE_URL (PayFast return/cancel/notify): ${base}`);
+  console.log(`FRONTEND_URL (PayFast return/cancel): ${front}`);
+  console.log(`API_PUBLIC_URL (PayFast ITN notify): ${apiBase}`);
   console.log(`PayFast mode: ${sandbox ? 'SANDBOX' : 'LIVE'} → ${payfastProcessUrl()}`);
-  console.log(`  return: ${base}/payment-success.html`);
-  console.log(`  cancel: ${base}/payment-cancel.html`);
-  console.log(`  notify: ${base}/api/payfast/itn`);
+  console.log(`  return: ${front}/payment-success.html`);
+  console.log(`  cancel: ${front}/payment-cancel.html`);
+  console.log(`  notify: ${apiBase}/api/payfast/itn`);
 });
