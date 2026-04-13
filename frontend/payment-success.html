@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Payment successful — CultivatedText</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-thankyou page-payment-result">
+
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="sales.html">Offer</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="ty-hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-glow top-right" aria-hidden="true"></div>
+    <div class="container ty-inner">
+      <div class="ty-icon-wrap animate-up" aria-hidden="true">
+        <span class="ty-check">✓</span>
+      </div>
+      <h1 class="ty-headline animate-up delay-1">
+        Payment <em class="gold-em">successful</em>
+      </h1>
+      <p class="ty-sub animate-up delay-2">
+        PayFast has confirmed your payment. You will receive an email within a few minutes with download links and instructions to book your coaching call.
+      </p>
+      <div class="payment-next-steps animate-up delay-3">
+        <h2 class="payment-next-title">Next steps</h2>
+        <ol class="payment-next-list">
+          <li>Check your inbox for the confirmation email from CultivatedText.</li>
+          <li>Download the kit using the link in that email.</li>
+          <li>Book your 1-hour call using the calendar link provided.</li>
+          <li>Save the WhatsApp number for 30-day support.</li>
+        </ol>
+      </div>
+      <p class="ty-sub muted animate-up delay-4">
+        Did not receive an email? Check spam, then contact us on WhatsApp from the sales page.
+      </p>
+      <a href="index.html" class="btn-primary btn-large animate-up delay-4">Back to home</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+      <p class="footer-copy">© 2026 CultivatedText · East London, SA</p>
+    </div>
+  </footer>
+
+  <script src="js/analytics.js" defer></script>
+  <script src="main.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.CultivatedTextAnalytics) {
+        window.CultivatedTextAnalytics.track('payment_success_view', { path: '/payment-success' });
+      }
+    });
+  </script>
+</body>
+</html>

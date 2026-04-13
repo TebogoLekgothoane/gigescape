@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CultivatedText — Free AI CV prompt pack for South African job seekers. ATS-friendly, LinkedIn-ready." />
+  <title>CultivatedText — Turn Your CV Into a Job Magnet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-landing">
+
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#benefits">Benefits</a></li>
+      <li><a href="sales.html" class="nav-cta">See the offer</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-glow top-right" aria-hidden="true"></div>
+    <div class="hero-glow bottom-left" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge animate-up">
+          <span class="badge-dot" aria-hidden="true"></span> Free prompt pack · No card · Instant access
+        </div>
+        <h1 class="hero-headline animate-up delay-1">
+          Turn your CV into<br /><em class="gold-em">a shortlist-ready profile</em>
+        </h1>
+        <p class="hero-sub animate-up delay-2">
+          Download the free AI prompt pack used by SA professionals to improve CV clarity and pass ATS screening — works with free ChatGPT.
+        </p>
+        <div class="hero-trust animate-up delay-3">
+          <span>ATS-oriented</span>
+          <span>LinkedIn-ready</span>
+          <span>Free ChatGPT</span>
+        </div>
+      </div>
+
+      <div class="form-card animate-up delay-2" id="lead-form">
+        <div class="form-card-header">
+          <p class="form-eyebrow">Free resource</p>
+          <h2 class="form-title">Get the AI résumé<br />prompt pack</h2>
+          <p class="form-subtitle">We’ll email the PDF link shortly after you submit.</p>
+        </div>
+        <form id="leadForm" novalidate>
+          <p id="formGlobalError" class="form-global-error" role="alert"></p>
+          <div class="form-group">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" autocomplete="name" maxlength="100" required />
+            <span class="form-error" id="nameError"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" maxlength="120" required />
+            <span class="form-error" id="emailError"></span>
+          </div>
+          <div class="form-group">
+            <label>Your status</label>
+            <div class="status-pills">
+              <label class="pill"><input type="radio" name="status" value="Student" /><span>Student</span></label>
+              <label class="pill"><input type="radio" name="status" value="Graduate" /><span>Graduate</span></label>
+              <label class="pill"><input type="radio" name="status" value="Job Seeker" /><span>Job seeker</span></label>
+              <label class="pill"><input type="radio" name="status" value="Contractor" /><span>Contractor</span></label>
+            </div>
+            <span class="form-error" id="statusError"></span>
+          </div>
+          <button type="submit" class="btn-primary btn-full" id="leadSubmitBtn" aria-busy="false">
+            <span class="btn-label">Get the free pack</span>
+            <span class="btn-loading" aria-hidden="true"></span>
+          </button>
+          <p class="form-disclaimer">No spam. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="proof-bar">
+    <div class="container proof-inner">
+      <span class="proof-label">Built for professionals in:</span>
+      <span class="proof-item">East London</span>
+      <span class="proof-item">Johannesburg</span>
+      <span class="proof-item">Cape Town</span>
+      <span class="proof-item">500+ SA users (est.)</span>
+    </div>
+  </div>
+
+  <section class="benefits" id="benefits">
+    <div class="container">
+      <div class="section-label">Why CultivatedText</div>
+      <h2 class="section-title">A clear system for <em>getting shortlisted</em></h2>
+      <p class="section-sub">Many CVs are filtered automatically. These prompts help you align wording with how recruiters and ATS tools read applications.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">⚡</div>
+          <h3>Faster shortlisting</h3>
+          <p>Prompts help you rewrite experience with relevant keywords for SA job boards and LinkedIn.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">🤖</div>
+          <h3>ATS-friendly structure</h3>
+          <p>Templates emphasise readable layout and phrasing that typical applicant systems can parse.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">💼</div>
+          <h3>LinkedIn summary</h3>
+          <p>A concise template you can adapt for your headline and about section.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">📋</div>
+          <h3>7-day checklist</h3>
+          <p>Step-by-step actions from first draft to applications.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">🇿🇦</div>
+          <h3>South Africa context</h3>
+          <p>Examples tuned to local hiring channels and contract work.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon" aria-hidden="true">🎯</div>
+          <h3>Non-grad friendly</h3>
+          <p>Framing for hands-on roles and project outcomes, not only degrees.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="inside-section">
+    <div class="container">
+      <div class="inside-grid">
+        <div class="inside-text">
+          <div class="section-label">Inside the free pack</div>
+          <h2 class="section-title">Three prompts. One LinkedIn<br />template. A 7-day plan.</h2>
+          <ul class="inside-list">
+            <li><span class="check">✓</span><div><strong>Hazardous goods gig booster</strong> — CV rewrite prompts for logistics-style roles</div></li>
+            <li><span class="check">✓</span><div><strong>Supply chain scaler</strong> — Turn operational work into measurable outcomes</div></li>
+            <li><span class="check">✓</span><div><strong>Gig freedom quick-fix</strong> — Full pass with LinkedIn-ready summary</div></li>
+            <li><span class="check">✓</span><div><strong>LinkedIn summary</strong> — Editable template</div></li>
+            <li><span class="check">✓</span><div><strong>7-day checklist</strong> — From draft to applications</div></li>
+          </ul>
+          <a href="#lead-form" class="btn-primary">Get the free pack</a>
+        </div>
+        <div class="inside-visual">
+          <div class="mock-doc">
+            <div class="mock-doc-header">
+              <span class="mock-dot red"></span>
+              <span class="mock-dot yellow"></span>
+              <span class="mock-dot green"></span>
+              <span class="mock-doc-title">AI_Resume_Prompt_Pack.pdf</span>
+            </div>
+            <div class="mock-doc-body">
+              <div class="mock-line title-line"></div>
+              <div class="mock-line short-line"></div>
+              <div class="mock-divider"></div>
+              <div class="mock-section-label">PROMPT #1</div>
+              <div class="mock-line"></div>
+              <div class="mock-line medium-line"></div>
+              <div class="mock-line"></div>
+              <div class="mock-line short-line"></div>
+              <div class="mock-divider"></div>
+              <div class="mock-section-label">PROMPT #2</div>
+              <div class="mock-line"></div>
+              <div class="mock-line medium-line"></div>
+              <div class="mock-line short-line"></div>
+              <div class="mock-divider"></div>
+              <div class="mock-section-label">7-DAY CHECKLIST</div>
+              <div class="mock-checklist">
+                <div class="mock-check-item"><span class="mock-check-box checked"></span><div class="mock-line short-line"></div></div>
+                <div class="mock-check-item"><span class="mock-check-box checked"></span><div class="mock-line medium-line"></div></div>
+                <div class="mock-check-item"><span class="mock-check-box"></span><div class="mock-line"></div></div>
+                <div class="mock-check-item"><span class="mock-check-box"></span><div class="mock-line short-line"></div></div>
+              </div>
+              <div class="mock-badge">FREE PACK · CULTIVATEDTEXT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+      <p class="footer-text">Practical CV and LinkedIn guidance for South African professionals.</p>
+      <p class="footer-copy">© 2026 CultivatedText · East London, SA</p>
+    </div>
+  </footer>
+
+  <script src="js/analytics.js" defer></script>
+  <script src="main.js" defer></script>
+</body>
+</html>

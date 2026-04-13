@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Payment cancelled — CultivatedText</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-thankyou page-payment-result">
+
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="sales.html" class="nav-cta">Try again</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="ty-hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-glow top-right" aria-hidden="true"></div>
+    <div class="container ty-inner">
+      <div class="ty-icon-wrap ty-icon-cancel animate-up" aria-hidden="true">
+        <span class="ty-check">✕</span>
+      </div>
+      <h1 class="ty-headline animate-up delay-1">
+        Payment <em class="gold-em">cancelled</em>
+      </h1>
+      <p class="ty-sub animate-up delay-2">
+        You cancelled the PayFast checkout or it could not be completed. No payment was taken.
+      </p>
+      <a href="sales.html#get-access" class="btn-primary btn-large animate-up delay-3">Try again — R1,000</a>
+      <p class="teaser-disclaimer animate-up delay-3">Questions? Use WhatsApp on the sales page.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+      <p class="footer-copy">© 2026 CultivatedText · East London, SA</p>
+    </div>
+  </footer>
+
+  <script src="js/analytics.js" defer></script>
+  <script src="main.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.CultivatedTextAnalytics) {
+        window.CultivatedTextAnalytics.track('payment_cancel_view', { path: '/payment-cancel' });
+      }
+    });
+  </script>
+</body>
+</html>

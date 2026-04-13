@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Thank you — your CultivatedText prompt pack is on the way." />
+  <title>Thank you — CultivatedText</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page-thankyou">
+
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="sales.html" class="nav-cta">View paid offer</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="ty-hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="hero-glow top-right" aria-hidden="true"></div>
+    <div class="container ty-inner">
+      <div class="ty-icon-wrap animate-up" aria-hidden="true">
+        <span class="ty-check">✓</span>
+      </div>
+      <h1 class="ty-headline animate-up delay-1">
+        You’re in — your pack is<br /><em class="gold-em">on the way</em>
+      </h1>
+      <p class="ty-sub animate-up delay-2">
+        Check your inbox in the next <strong>2–5 minutes</strong>.<br />
+        <span class="muted">If nothing arrives, check spam and add us to your safe senders.</span>
+      </p>
+
+      <div class="ty-steps animate-up delay-3">
+        <div class="ty-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Open the email</strong><br />from CultivatedText</div>
+        </div>
+        <div class="step-arrow" aria-hidden="true">→</div>
+        <div class="ty-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Download the PDF</strong><br />AI résumé prompt pack</div>
+        </div>
+        <div class="step-arrow" aria-hidden="true">→</div>
+        <div class="ty-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Run the prompts</strong><br />in ChatGPT (free tier)</div>
+        </div>
+      </div>
+
+      <div class="ty-teaser animate-up delay-4">
+        <div class="teaser-label">Next step</div>
+        <h2 class="teaser-headline">
+          Want the <em>full</em> system — templates, call, and support?
+        </h2>
+        <p class="teaser-sub">
+          The free pack includes prompts. The <strong>AI Résumé Quick-Win Kit</strong> adds expanded templates, LinkedIn funnel copy, a one-hour coaching call, and 30 days of WhatsApp support — <strong>R1,000</strong> once-off.
+        </p>
+        <div class="teaser-value-row">
+          <div class="teaser-val-item">
+            <span class="val-num">10+</span>
+            <span class="val-label">Templates</span>
+          </div>
+          <div class="teaser-divider"></div>
+          <div class="teaser-val-item">
+            <span class="val-num">1hr</span>
+            <span class="val-label">Live call</span>
+          </div>
+          <div class="teaser-divider"></div>
+          <div class="teaser-val-item">
+            <span class="val-num">30</span>
+            <span class="val-label">Days support</span>
+          </div>
+          <div class="teaser-divider"></div>
+          <div class="teaser-val-item">
+            <span class="val-num gold">R1k</span>
+            <span class="val-label">Once-off</span>
+          </div>
+        </div>
+        <a href="sales.html" class="btn-primary btn-large">See the full offer on the sales page</a>
+        <p class="teaser-disclaimer">Limited coaching slots each month</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="index.html" class="nav-logo">Cultivated<span>Text</span></a>
+      <p class="footer-copy">© 2026 CultivatedText · East London, SA</p>
+    </div>
+  </footer>
+
+  <script src="js/analytics.js" defer></script>
+  <script src="main.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.CultivatedTextAnalytics) {
+        window.CultivatedTextAnalytics.track('thank_you_view', { path: '/thankyou' });
+      }
+    });
+  </script>
+</body>
+</html>

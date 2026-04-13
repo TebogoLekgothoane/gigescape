@@ -1,0 +1,35 @@
+[
+  {
+    "id": "9d26a22a-cd39-4bb5-9bae-53f8c9c35ef7",
+    "name": "Test User",
+    "email": "test@example.com",
+    "status": "Student",
+    "createdAt": "2026-04-13T16:20:19.943Z",
+    "paid": false,
+    "paymentId": null,
+    "paymentAmount": null,
+    "paidAt": null
+  },
+  {
+    "id": "d395e1af-07a0-4c70-8210-d711c8e5c316",
+    "name": "Test",
+    "email": "dup2@test.com",
+    "status": "Graduate",
+    "createdAt": "2026-04-13T16:20:47.606Z",
+    "paid": false,
+    "paymentId": null,
+    "paymentAmount": null,
+    "paidAt": null
+  },
+  {
+    "id": "2f65553c-04d7-4ff3-a0df-b0cedae5a39c",
+    "name": "Tebogo Lekgothoane",
+    "email": "tebogolekgothoane5@gmail.com",
+    "status": "Job Seeker",
+    "createdAt": "2026-04-13T17:08:56.555Z",
+    "paid": false,
+    "paymentId": null,
+    "paymentAmount": null,
+    "paidAt": null
+  }
+]

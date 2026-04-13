@@ -20,8 +20,9 @@
   --muted:      #8a9ab5;
   --danger:     #ff5a6e;
 
-  --font-display: 'Syne', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
+  /* SaaS-style pairing: Poppins headings, Inter body */
+  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
 
   --radius:    12px;
   --radius-lg: 20px;
@@ -29,6 +30,9 @@
   --shadow-card: 0 8px 48px rgba(0,0,0,.55);
 
   --transition: .25s cubic-bezier(.4,0,.2,1);
+
+  /* Consistent section rhythm (mobile-first) */
+  --space-section: clamp(3.5rem, 8vw, 6rem);
 }
 
 html { scroll-behavior: smooth; }
@@ -783,7 +787,7 @@ img { display: block; max-width: 100%; }
   max-height: 0; overflow: hidden;
   transition: max-height .4s ease, padding .3s ease;
 }
-.faq-a.open { max-height: 300px; padding-bottom: 20px; }
+.faq-a.open { max-height: 800px; padding-bottom: 20px; }
 .faq-a p { font-size: .93rem; color: var(--muted); line-height: 1.7; }
 .faq-a strong { color: var(--white); }
 
@@ -914,4 +918,194 @@ img { display: block; max-width: 100%; }
   .payment-card { padding: 28px 20px; }
   .form-card { padding: 28px 20px; }
   .proof-inner { gap: 10px; }
+}
+
+/* =============================================
+   FORM — GLOBAL ERROR, LOADING SPINNER
+   ============================================= */
+.form-global-error {
+  background: rgba(255, 90, 110, 0.12);
+  border: 1px solid rgba(255, 90, 110, 0.35);
+  color: #ffb4bd;
+  font-size: 0.88rem;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  text-align: left;
+  display: none;
+}
+.form-global-error.is-visible { display: block; }
+
+.btn-primary .btn-loading {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 2.5px solid rgba(7, 9, 15, 0.25);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+}
+.btn-primary.is-loading {
+  pointer-events: none;
+  opacity: 0.92;
+}
+.btn-primary.is-loading .btn-label {
+  opacity: 0;
+}
+.btn-primary.is-loading .btn-loading {
+  display: block;
+}
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-primary:focus-visible,
+.nav-links a:focus-visible,
+.whatsapp-link:focus-visible,
+a.btn-primary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* =============================================
+   THANK YOU — SUCCESS ANIMATION
+   ============================================= */
+.ty-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: rgba(45, 206, 123, 0.12);
+  border: 1px solid rgba(45, 206, 123, 0.35);
+  animation: ty-pop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.ty-icon-wrap .ty-check {
+  font-size: 2.5rem;
+  line-height: 1;
+  animation: ty-check-in 0.5s 0.15s ease both;
+}
+@keyframes ty-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes ty-check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* PayFast demo notice (no alert()) */
+.payfast-demo-banner {
+  display: none;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  color: var(--gold-light);
+  font-size: 0.85rem;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-top: 12px;
+  text-align: center;
+}
+.payfast-demo-banner.is-visible {
+  display: block;
+}
+
+/* PayFast checkout block (sales page) */
+.payfast-checkout {
+  text-align: left;
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.payfast-checkout .payfast-icon {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.payfast-checkout .form-global-error {
+  margin-bottom: 12px;
+}
+.payfast-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .payfast-name-row {
+    grid-template-columns: 1fr;
+  }
+}
+.payfast-field input[type='email'],
+.payfast-field input[type='text'] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid var(--navy-border);
+  border-radius: 10px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  padding: 13px 16px;
+  outline: none;
+}
+.payfast-field input:focus {
+  border-color: var(--gold);
+}
+.payfast-field input.error {
+  border-color: var(--danger);
+}
+
+.payment-next-steps {
+  text-align: left;
+  max-width: 520px;
+  margin: 0 auto 32px;
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+}
+.payment-next-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.payment-next-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.payment-next-list li {
+  margin-bottom: 8px;
+}
+
+.ty-icon-wrap.ty-icon-cancel {
+  background: rgba(255, 90, 110, 0.1);
+  border-color: rgba(255, 90, 110, 0.35);
+}
+.ty-icon-cancel .ty-check {
+  color: #ff8a96;
+  font-weight: 800;
 }
