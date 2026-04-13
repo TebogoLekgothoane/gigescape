@@ -29,6 +29,8 @@ This repository contains the **CultivatedText** web application: lead capture, t
 │   ├── styles.css
 │   ├── main.js
 │   └── js/analytics.js
+├── vercel.json                 ← maps / → frontend/ (fixes Vercel 404)
+├── package.json                ← minimal scripts for Vercel build step
 └── backend/
     ├── package.json
     ├── server.js               ← Express + APIs + static files
@@ -39,6 +41,21 @@ This repository contains the **CultivatedText** web application: lead capture, t
     └── data/
         └── leads.json          ← leads + payment flags
 ```
+
+## Deploying on Vercel
+
+**Why you saw `404 NOT_FOUND`:** Vercel deployed the **repo root**, which has no `index.html` at `/` — only under **`frontend/`**.
+
+**Fix (in this repo):** **`vercel.json`** rewrites requests so `/` and `/sales.html` etc. map to **`frontend/`**. Redeploy after pulling this change (`vercel --prod` or push to GitHub if the project is linked).
+
+**APIs on Vercel:** A plain **static** deployment does **not** run the **Express** server. Paths like **`/api/lead`** and **`/api/payfast/*`** will **not** work on Vercel until you either:
+
+1. **Host the backend elsewhere** (e.g. **Railway**, **Render**, **Fly.io**) and point the browser at that API:
+   - Set **`window.__API_BASE__`** to your API origin (e.g. `https://your-api.railway.app`) **before** `main.js` loads on each HTML page, **or**
+   - Add a **Vercel rewrite** (in the dashboard) from `/api/:path*` → your backend’s `/api/:path*`, and keep **`CORS_ORIGIN`** on the backend including `https://gigesacpe.vercel.app` (your real Vercel URL).
+2. **Or** run **only** the full Node app on a VPS/Railway (Express serves **`frontend/`** + API in one process) and skip Vercel for production.
+
+**PayFast `BASE_URL`:** Must be your **public** site URL (e.g. `https://gigesacpe.vercel.app`) so return/cancel/notify URLs are correct.
 
 ## Lead record (JSON)
 

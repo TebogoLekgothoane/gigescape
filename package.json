@@ -1,0 +1,10 @@
+{
+  "name": "gigesacpe",
+  "private": true,
+  "description": "Static UI in frontend/; Express API runs via backend/ (local, Railway, Render, etc.).",
+  "scripts": {
+    "build": "echo skip",
+    "vercel-build": "echo skip",
+    "start": "npm start --prefix backend"
+  }
+}
